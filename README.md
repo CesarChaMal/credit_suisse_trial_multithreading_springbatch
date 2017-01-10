@@ -42,11 +42,36 @@ Modifier_Max=10
 # To enable the price modifier worker generate random doubles otherwise worker generate 
 # random integers
 Modifier_Double=true
-# Batch size of the lines of instrument to the stream to process  
-Batch_Size=200
 
 
+It can be use this class to generate test cases  
 
+com.credit_suisse.app.execs.InstrumentFileGenerator
+
+
+Design Patterns used
+
+Static Factory
+Singleton
+Strategy
+Builder
+Dependency Injection
+Dao
+Dto
+Iterator
+Decorator
+Command
+
+OOO Principles applied
+
+Single-responsiblity principle (All the classes should follow this principle as an example TaskManager class)
+Open-closed principle (Static Factory added for CalculatorEngine to not violate this principle)
+Liskov substitution principle (Decorator, Strategy, Composite for example used for the Instrument class)
+Interface segregation principle (Any of the calculations modules classes)
+Dependency Inversion Principle (Dependency Injection and Strategy for example used in CalculatorEngineManager class)
+
+
+Trial Description
 
 In the financial world we're operating on a term "financial instrument". You can think of it as of a collection of prices of currencies, commodities, derivatives, etc.
 

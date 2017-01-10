@@ -2,7 +2,6 @@ package com.credit_suisse.app.core;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.Map.Entry;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -11,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.credit_suisse.app.dao.InstrumentPriceModifierDao;
-import com.credit_suisse.app.model.Instrument;
 import com.credit_suisse.app.util.CommonConstants;
 import com.credit_suisse.app.util.InstrumentUtil;
 import com.credit_suisse.app.util.emWorkerProfile;
@@ -48,7 +46,9 @@ public class TaskExecutor implements Runnable {
 					
 					System.out.println("instrumentPriceModifierDao: " + instrumentPriceModifierDao);
 					
-					updateModifiers();
+					PriceModiferWorker worker = new PriceModiferWorker();
+					worker.updateModifiers(instrumentPriceModifierDao);
+					
 					logger.info(workername + " Worker off");
 					
 					synchronized(this){
