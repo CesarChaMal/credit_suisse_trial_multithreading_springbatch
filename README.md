@@ -9,6 +9,7 @@ Credit Suisse Trial to get a job in Poland
 ###2. To Run this project locally
 ```shell
 $ mvn spring-boot:run
+```
 
 ###3. app.properties provided for configuration
 
