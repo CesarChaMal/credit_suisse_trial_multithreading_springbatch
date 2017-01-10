@@ -23,9 +23,8 @@ public class InstrumentPriceModifierDaoTest {
     public void setUp() {
         //db = new EmbeddedDatabaseBuilder().addDefaultScripts().build();
     	db = new EmbeddedDatabaseBuilder()
-    		.setType(EmbeddedDatabaseType.H2)
-    		.addScript("db/sql/h2/create-db.sql")
-    		.addScript("db/sql/h2/insert-data.sql")
+    		.setType(EmbeddedDatabaseType.HSQL)
+    		.addScript("schema-all.sql")
     		.build();
     }
 

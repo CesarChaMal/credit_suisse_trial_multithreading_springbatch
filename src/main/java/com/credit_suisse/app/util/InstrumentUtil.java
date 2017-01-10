@@ -86,13 +86,7 @@ public class InstrumentUtil {
 		Timestamp rand = new Timestamp(offset + (long)(Math.random() * diff));
 
 		DateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.US);
-//		DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-		Date today = (Date) Calendar.getInstance().getTime();        
-		String todayDate = df.format(today);
 		String date = df.format(rand);
-
-//		System.out.println(date);
-//		System.out.println(today);
 		return date;
 	} 
 	

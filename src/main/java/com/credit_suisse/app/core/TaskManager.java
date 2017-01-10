@@ -38,8 +38,6 @@ public class TaskManager implements InitializingBean, DisposableBean, Applicatio
     Timer timer;
 
 	public TaskManager() {
-		System.out.println("Task Manager");
-//		System.out.println("instrumentPriceModifierDao: " + instrumentPriceModifierDao);
 	}
 	
 	public TaskManager(int threads) {
@@ -59,8 +57,6 @@ public class TaskManager implements InitializingBean, DisposableBean, Applicatio
 	    logger.info("Starting TaskManager with " + numThreads + " threads...");
 		executorService = Executors.newFixedThreadPool(numThreads);
 	    
-//		System.out.println("instrumentPriceModifierDao: " + instrumentPriceModifierDao);
-		
 		String hostname = null;
 		try{
 			hostname = InetAddress.getLocalHost().getHostName();
@@ -68,7 +64,6 @@ public class TaskManager implements InitializingBean, DisposableBean, Applicatio
 			logger.error("Unable to get hostname",e);
 		}
 
-//		executorService.execute(new TaskExecutor("TaskExecutor_" +  hostname + "_" + CommonConstants.WORKER_PROFILE, emWorkerProfile.PROFILE_INSTRUMENT, instrumentPriceModifierDao));
 		executorService.execute(new TaskExecutor("TaskExecutor_" +  hostname + "_" + CommonConstants.WORKER_PROFILE, emWorkerProfile.PROFILE_INSTRUMENT));
 	}
 
@@ -89,8 +84,6 @@ public class TaskManager implements InitializingBean, DisposableBean, Applicatio
         {
         	logger.info("TaskManager received ContextRefreshedEvent");
 
-//        	System.out.println("instrumentPriceModifierDao: " + instrumentPriceModifierDao);
-            
 	        start();
 	        
 	        timer = new Timer();
@@ -98,8 +91,7 @@ public class TaskManager implements InitializingBean, DisposableBean, Applicatio
 	        logger.debug("STARTING Threads Managers");
 	        
 	        if(CommonConstants.MANAGER_ON)
-//	        	timer.schedule(CalculatorEngineRefresh.getInstance(instrumentPriceModifierDao),0, CommonConstants.REFRESH_MILLIS);
-	        	timer.schedule(CalculatorEngineRefresh.getInstance(),0, CommonConstants.REFRESH_MILLIS);
+	        	timer.schedule(CalculatorEngineRefresh.getInstance(),30000, CommonConstants.REFRESH_MILLIS);
 	        else
 	        	logger.debug("Instrument Manager is configured not to run, skipping startup!");
         }

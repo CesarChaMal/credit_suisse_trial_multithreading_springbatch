@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Step;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Scope;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import com.credit_suisse.app.dao.InstrumentPriceModifierDao;
@@ -31,24 +32,31 @@ import com.credit_suisse.app.util.InstrumentUtil;
 
 public class CalculatorEngine extends Thread {
 	
-	private static final Logger logger = LoggerFactory.getLogger(CalculatorEngine.class);
+	private static Logger logger = LoggerFactory.getLogger(CalculatorEngine.class);
 
+	@Autowired
 	private static Map<String, List<Instrument>> INSTRUMENTS = new TreeMap<>();
-//	private static volatile Map<String, List<Instrument>> INSTRUMENTS = new ConcurrentHashMap<>();
-
 	
 	@Autowired
 	Step springBatchStep;
 	
+	@Autowired
 	private static Map<String, Instrument> MODULES = new TreeMap<>();
-//	private static volatile Map<String, Instrument> MODULES = new ConcurrentHashMap<>();
 
 	private String inputPath = null;
 	
+	@Bean
+	@Scope("singleton")
 	public static Map<String, Instrument> getModules() {
 		return MODULES;
 	}
 
+	@Bean
+	@Scope("singleton")
+	public static Map<String, List<Instrument>> getINSTRUMENTS() {
+		return INSTRUMENTS;
+	}
+	
 	@Autowired
 	private DataSource dataSource;
 
@@ -66,15 +74,15 @@ public class CalculatorEngine extends Thread {
 	}
 
 	public CalculatorEngine() {
-		init();
+//		init();
 	}
 	
 	// commented out because causes synchronization issue
 	static {
-//		init();
+		init();
 	}
 
-	private synchronized static void init() {
+	public synchronized static void init() {
 		logger.debug("Init instruments");
 
 		for (int i = 1; i <= CommonConstants.INSTRUMENTS_COUNT; i++) {
@@ -83,25 +91,6 @@ public class CalculatorEngine extends Thread {
 
 			Instrument instrument = InstrumentFactory.createInstrument(name);
 			MODULES.put(name, instrument);
-
-//			if (name.equals(CommonConstants.INSTRUMENT1)){
-//				Instrument instrument1 = new Instrument1(CommonConstants.INSTRUMENT1);
-//				instrument1.setInstrumentCalculateBehavior(new AverageModule());
-//				MODULES.put(CommonConstants.INSTRUMENT1, instrument1);
-//			} else if (name.equals(CommonConstants.INSTRUMENT2)){
-//				Instrument instrument2 = new Instrument2(CommonConstants.INSTRUMENT2);
-//				instrument2.setInstrumentCalculateBehavior(new AverageMonthModule());
-//				MODULES.put(CommonConstants.INSTRUMENT2, instrument2);
-//			} else if (name.equals(CommonConstants.INSTRUMENT3)){
-//				Instrument instrument3 = new Instrument3(CommonConstants.INSTRUMENT3);
-//				instrument3.setInstrumentCalculateBehavior(new OnFlyModule());
-//				MODULES.put(CommonConstants.INSTRUMENT3, instrument3);
-//			} else{
-//				Instrument newInstrument = new newInstrument(CommonConstants.NEW_INSTRUMENT);
-//				newInstrument.setInstrumentCalculateBehavior(new AverageNewstInstrumentsModule(name));
-//				MODULES.put(name, newInstrument);
-//			}
-			
 		}
 
 	}
@@ -154,7 +143,6 @@ public class CalculatorEngine extends Thread {
 
 			if (CommonConstants.MODIFIERS) {
 				compute = instrumentValue * multiplierValue;
-//				compute = Double.parseDouble(formatter.format(instrumentValue * multiplierValue));
 			} else {
 				compute = instrumentValue;
 			}
@@ -162,7 +150,6 @@ public class CalculatorEngine extends Thread {
 			logger.info(instrumentModule.getKey() + ":" + instrumentValue);
 			logger.info("Multiplier:" + multiplierValue);
 			logger.info("Result: " + compute + "\n");
-//			result.put(instrumentModule.getKey(), );
 			result.put(instrumentModule.getKey(), compute);
 		}
 		return result;
@@ -236,6 +223,8 @@ public class CalculatorEngine extends Thread {
 		
 		InstrumentPriceModifierDao instrumentPriceModifierDao = null;
 		
+		
+		
 //		List<InstrumentPriceModifier> modifiers = instrumentPriceModifierDao.findAll();
 //		modifiers.forEach(System.out::println);
 
@@ -256,7 +245,9 @@ public class CalculatorEngine extends Thread {
 //		});
 //		
 //		this.addModule(newInstrument);
-		this.calculate(instrumentPriceModifierDao);
+		Map<String, Double> prices = new TreeMap<>();
+		prices = this.calculate(instrumentPriceModifierDao);
+		prices.entrySet().stream().forEach(System.out::println);
 	}
 
 }

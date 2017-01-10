@@ -66,19 +66,5 @@ public class TaskExecutor implements Runnable {
 
 	}
 
-	public synchronized void updateModifiers() {
-		String name = "";
-		double multiplier = 0;
-		NumberFormat formatter = new DecimalFormat("#0.00000");     
-		for (int i = 1; i <= CommonConstants.INSTRUMENTS_COUNT; i++) {
-			name = "INSTRUMENT" + i;
-			if(CommonConstants.MODIFIER_DOUBLE)
-				multiplier = Double.parseDouble(formatter.format(InstrumentUtil.generateRandomNumberDouble(CommonConstants.MODIFIER_MIN, CommonConstants.MODIFIER_MAX)));
-			else
-				multiplier = InstrumentUtil.generateRandomNumberInteger(CommonConstants.MODIFIER_MIN, CommonConstants.MODIFIER_MAX);
-			instrumentPriceModifierDao.setMultiplier(name, multiplier);
-		}
-	}
-
 }
 

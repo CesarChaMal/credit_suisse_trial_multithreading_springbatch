@@ -10,6 +10,8 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.credit_suisse.app.util.InstrumentUtil;
+
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -28,7 +30,6 @@ public class InstrumentFileGenerator {
 
 		try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos))) {
 			
-//			DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
 			DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String from = "2000-01-01 00:00:00";
 			String to = "2017-01-01 00:00:00";
@@ -45,10 +46,6 @@ public class InstrumentFileGenerator {
 
 			int counter = 1;
 			String instrument = ""; 
-//			for (int i = 1; i <= 10; i++) {
-//			for (int i = 1; i <= 200; i++) {
-//			for (int i = 1; i <= 5000; i++) {
-//			for (int i = 1; i <= 1000; i++) {
 			for (long i = 1; i <= 1000000000; i++) {
 				instrument = "INSTRUMENT" + counter;
 				
@@ -69,7 +66,6 @@ public class InstrumentFileGenerator {
 				String date = InstrumentUtil.generateRandomDateRange(fromDate, toDate);
 				Double number = Double.parseDouble(formatter.format(InstrumentUtil.generateRandomNumberDouble(0, 100)));
 				String instrumentGenerated = instrument + "," + date + "," + number;
-//				logger.info(instrumentGenerated);				
 				System.out.println("\n" + instrumentGenerated + "\n");				
 				showFileSize(fout);
 				

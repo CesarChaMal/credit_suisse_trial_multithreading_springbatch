@@ -37,7 +37,6 @@ public class Bootstrap implements InitializingBean, ApplicationContextAware, App
 		this.ctx = ctx;
 	}
 
-//	@Value("{classpath:app.properties}")
 	@Value("{appProperties}")
     Properties appProperties;
 

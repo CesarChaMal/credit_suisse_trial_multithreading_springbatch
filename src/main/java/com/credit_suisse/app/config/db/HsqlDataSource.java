@@ -11,7 +11,6 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.stereotype.Component;
 
 @Configuration 
-//@Profile("hsql")
 public class HsqlDataSource {
 
 	//jdbc:hsqldb:mem:testdb

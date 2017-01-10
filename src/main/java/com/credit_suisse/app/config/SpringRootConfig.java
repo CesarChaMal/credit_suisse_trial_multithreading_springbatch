@@ -45,7 +45,6 @@ public class SpringRootConfig {
 
 	@Value("${ThreadPoolSize}")
     private int threadPoolSize;
-//    private int threadPoolSize = CommonConstants.THREAD_POOL_SIZE;
     
     @Bean
     public Bootstrap bootstrap() {
