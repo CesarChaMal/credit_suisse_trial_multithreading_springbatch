@@ -61,9 +61,17 @@ public class SpringRootConfig {
     	CommonConstants.THREAD_POOL_SIZE = threadPoolSize;
         return Executors.newFixedThreadPool(threadPoolSize);
     }
-    
-	@PostConstruct
-	public void init() {
-	}
+
+    @PostConstruct
+    public void startDBManager() {
+        //hsqldb
+//		DatabaseManagerSwing.main(new String[] { "--url", "jdbc:hsqldb:mem:testdb", "--user", "sa", "--password", "" });
+
+        //derby
+//		DatabaseManagerSwing.main(new String[] { "--url", "jdbc:derby:memory:testdb", "--user", "", "--password", "" });
+
+        //h2
+//		DatabaseManagerSwing.main(new String[] { "--url", "jdbc:h2:mem:testdb", "--user", "sa", "--password", "" });
+    }
 	
 }

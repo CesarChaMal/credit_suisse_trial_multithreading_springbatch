@@ -16,7 +16,8 @@ public class CommonConstants {
 	public static long SLEEP_MILLIS = 1000;
 	public static int THREAD_POOL_SIZE = 10;
 	public static int MAX_THREADS = 2;
-	public static String INPUT_FILE = "src/main/resources/input.txt";
+	// Use classpath-relative name for resources instead of file-system path
+	public static String INPUT_FILE = "input.txt";
 	public static String WORKER_PROFILE = "Instrument-1";
 	public static String LOG = "logs/log";
 	public static int MODIFIER_MIN = 1;

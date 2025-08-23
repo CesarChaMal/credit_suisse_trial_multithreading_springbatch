@@ -6,8 +6,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +17,6 @@ import org.junit.Test;
 import com.credit_suisse.app.core.CalculatorEngine;
 import com.credit_suisse.app.core.module.AverageModule;
 import com.credit_suisse.app.model.Instrument;
-import com.credit_suisse.app.util.CommonConstants;
 import com.credit_suisse.app.util.InstrumentUtil;
 import com.credit_suisse.app.util.PartitioningSpliterator;
 
@@ -34,7 +31,8 @@ public class ProcessingFileTest {
 
 		INSTRUMENTS.put(INSTRUMENT, new ArrayList<Instrument>());
 
-		InputStream is = ProcessingFileTest.class.getResourceAsStream("src/main/resources/input.txt");
+		// Load input file from classpath
+		InputStream is = ProcessingFileTest.class.getClassLoader().getResourceAsStream("input.txt");
 		BufferedReader br = new BufferedReader(new InputStreamReader(is));
 		String line;
 		AverageModule averageModule = new AverageModule();
@@ -58,36 +56,31 @@ public class ProcessingFileTest {
 			}
 		}
 
-//		INSTRUMENTS.get(INSTRUMENT).forEach(System.out::println);
-//		System.out.println(INSTRUMENTS.get(INSTRUMENT).size());
-//		System.out.println(averageModule.calculate());
-	
 		averageModule.addInstruments(INSTRUMENTS.get(INSTRUMENT));
 		assertEquals(4, INSTRUMENTS.get(INSTRUMENT).size());
-//    	assertEquals(0.0, averageModule.calculate(), 0.001);
 	}
 	
 	@Test
 	public void averageProcessingTesInChunks() {
-		
 		INSTRUMENTS.put(INSTRUMENT, new ArrayList<Instrument>());
 		AverageModule averageModule = new AverageModule();
-		
-    	try (Stream<String> stream = Files.lines(Paths.get("src/main/resources/huge_input.txt"))) {
-    		
-    		Stream<List<String>> partitioned = PartitioningSpliterator.partition(stream, 200, 1);
-    		partitioned.forEach(chunk -> {
-					chunk.stream()
-					.filter(instrument-> InstrumentUtil.isWorkDay(InstrumentUtil.getDate(instrument.split(",")[1])) )
+
+		// Load large_input.txt from classpath and process as a stream of lines
+		InputStream is = ProcessingFileTest.class.getClassLoader().getResourceAsStream("large_input.txt");
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+		     Stream<String> stream = reader.lines()) {
+
+			Stream<List<String>> partitioned = PartitioningSpliterator.partition(stream, 200, 1);
+			partitioned.forEach(chunk -> {
+				chunk.stream()
+					.filter(instrument -> InstrumentUtil.isWorkDay(InstrumentUtil.getDate(instrument.split(",")[1])))
 					.forEach(instrument -> CalculatorEngine.add(InstrumentUtil.defineOf(instrument)));
-					System.out.println(chunk.size());
-					chunk.forEach(System.out::println);
-				}
-    		);
-//    		stream.forEach(System.out::println);
-    	} catch (IOException e) {
-    		e.printStackTrace();
-    	}
+				System.out.println(chunk.size());
+				chunk.forEach(System.out::println);
+			});
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
